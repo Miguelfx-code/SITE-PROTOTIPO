@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     const togglePassword = document.querySelector('.toggle-password');
     const password = document.querySelector('#password');
+    const dobInput = document.getElementById('config-dob');
 
     if (togglePassword && password) {
         togglePassword.addEventListener('click', function () {
@@ -9,6 +10,12 @@ document.addEventListener('DOMContentLoaded', () => {
             this.classList.toggle('fa-eye');
             this.classList.toggle('fa-eye-slash');
         });
+    }
+
+    // Live DOB age calculation
+    if (dobInput) {
+        dobInput.addEventListener('change', atualizarStatusIdade);
+        dobInput.addEventListener('input', atualizarStatusIdade);
     }
 
     atualizarPontuacaoUI();
@@ -20,6 +27,75 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
+
+// Função para calcular idade a partir da data de nascimento
+function calcularIdade(dataNasc) {
+    if (!dataNasc) return 0;
+    const hoje = new Date();
+    const nascimento = new Date(dataNasc);
+    let idade = hoje.getFullYear() - nascimento.getFullYear();
+    const mesDiff = hoje.getMonth() - nascimento.getMonth();
+    if (mesDiff < 0 || (mesDiff === 0 && hoje.getDate() < nascimento.getDate())) {
+        idade--;
+    }
+    return idade;
+}
+
+// Atualiza status visual da verificação de idade
+function atualizarStatusIdade() {
+    const dobInput = document.getElementById('config-dob');
+    const statusEl = document.getElementById('dob-status');
+    const statusIcon = document.getElementById('status-icon');
+    const statusText = document.getElementById('status-text');
+    const hiddenAgeVerify = document.getElementById('config-age-verify');
+
+    if (!dobInput || !statusEl || !statusIcon || !statusText || !hiddenAgeVerify) return;
+
+    const dobValue = dobInput.value;
+    dataNascimentoUsuario = dobValue;
+
+    if (!dobValue) {
+        statusEl.className = 'dob-status neutral';
+        statusIcon.innerHTML = '○';
+        statusText.textContent = 'Insira sua data de nascimento';
+        hiddenAgeVerify.value = 'false';
+        return;
+    }
+
+    const idade = calcularIdade(dobValue);
+    const hoje = new Date();
+    const maxDataPermitida = new Date(hoje.getFullYear() - 13, hoje.getMonth(), hoje.getDate());
+
+    if (new Date(dobValue) > maxDataPermitida) {
+        statusEl.className = 'dob-status invalid';
+        statusIcon.innerHTML = '✗';
+        statusText.textContent = `Idade: ${idade} anos (necessário 13+ anos)`;
+        hiddenAgeVerify.value = 'false';
+    } else {
+        statusEl.className = 'dob-status valid';
+        statusIcon.innerHTML = '✓';
+        statusText.textContent = `Idade: ${idade} anos ✓ (verificado)`;
+        hiddenAgeVerify.value = 'true';
+    }
+}
+
+// Botão Verificar Idade handler
+function verificarIdade() {
+    atualizarStatusIdade();
+    
+    if (dataNascimentoUsuario) {
+        const idade = calcularIdade(dataNascimentoUsuario);
+        if (idade >= 13) {
+            document.getElementById('config-age-verify').value = 'true';
+            alert('✅ Idade verificada com sucesso! Você tem ' + idade + ' anos.');
+        } else {
+            document.getElementById('config-age-verify').value = 'false';
+            alert('❌ Você deve ter pelo menos 13 anos para usar o app.');
+        }
+    } else {
+        alert('Por favor, insira sua data de nascimento primeiro.');
+    }
+}
 
 let tipoUsuario = '';
 let categoriaAtual = '';
@@ -34,6 +110,7 @@ let emailCadastrado = '';
 let telefoneCadastrado = '';
 let generoCadastrado = '';
 let idadeVerificada = false;
+let dataNascimentoUsuario = '';
 let fotoTemporaria = null;
 let tempoInicioQuiz = null;
 let tempoTotalQuizSegundos = 0;
@@ -309,7 +386,13 @@ function abrirConfiguracoes() {
     document.getElementById('config-username').value = usuarioAtual;
     document.getElementById('config-email').value = emailCadastrado;
     document.getElementById('config-phone').value = telefoneCadastrado;
-    document.getElementById('config-age-verify').checked = idadeVerificada;
+    
+    // Inicializar DOB se existir
+    const dobInput = document.getElementById('config-dob');
+    if (dobInput && dataNascimentoUsuario) {
+        dobInput.value = dataNascimentoUsuario;
+        setTimeout(atualizarStatusIdade, 100); // Delay para DOM update
+    }
     
     // Inicializar gênero
     document.getElementById('config-gender').value = generoCadastrado;
@@ -371,8 +454,15 @@ function salvarConfiguracoes() {
     const inputNome = document.getElementById('config-username').value.trim();
     const inputEmail = document.getElementById('config-email').value.trim();
     const inputPhone = document.getElementById('config-phone').value.trim();
-    const inputAge = document.getElementById('config-age-verify').checked;
+    const dobInput = document.getElementById('config-dob');
+    const hiddenAgeVerify = document.getElementById('config-age-verify');
     const inputGender = document.getElementById('config-gender').value;
+
+    // Salvar DOB
+    if (dobInput) {
+        dataNascimentoUsuario = dobInput.value;
+        idadeVerificada = (hiddenAgeVerify.value === 'true');
+    }
 
     // Se o nome foi alterado, validar a senha
     if (inputNome !== usuarioAtual && inputNome !== '') {
@@ -387,7 +477,6 @@ function salvarConfiguracoes() {
     // Aplicar as outras mudanças
     emailCadastrado = inputEmail;
     telefoneCadastrado = inputPhone;
-    idadeVerificada = inputAge;
     generoCadastrado = inputGender;
 
     if (fotoTemporaria) {

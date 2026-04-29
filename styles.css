@@ -3560,3 +3560,233 @@ button:not(.login-button):not(.secondary-button):not(.link-button):not(.create-a
         padding-bottom: 30px;
     }
 }
+
+/* ===== DOB VERIFICATION - BEAUTIFUL ANIMATED DATE INPUT ===== */
+.dob-verification-box {
+    background: rgba(9, 1, 23, 0.9);
+    border: 1px solid rgba(155, 109, 255, 0.3);
+    border-radius: 16px;
+    padding: 20px;
+    backdrop-filter: blur(15px);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.dob-verification-box:hover {
+    border-color: rgba(155, 109, 255, 0.6);
+    box-shadow: 0 12px 40px rgba(155, 109, 255, 0.15);
+    transform: translateY(-2px);
+}
+
+.dob-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 18px;
+}
+
+.dob-header h4 {
+    margin: 0;
+    color: #fff;
+    font-size: 0.95rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+.dob-icon {
+    background: linear-gradient(135deg, #9b6dff, #4a148c);
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(155, 109, 255, 0.3);
+}
+
+.dob-input-group {
+    margin-bottom: 16px;
+}
+
+.dob-input-group label {
+    display: block;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+    letter-spacing: 0.3px;
+}
+
+.dob-input-wrapper {
+    position: relative;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1.5px solid rgba(155, 109, 255, 0.2);
+    border-radius: 12px;
+    padding: 14px 16px 14px 50px;
+    transition: all 0.3s ease;
+    overflow: hidden;
+}
+
+.dob-input-wrapper:focus-within {
+    border-color: #9b6dff;
+    box-shadow: 0 0 20px rgba(155, 109, 255, 0.25);
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.dob-icon {
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.1rem;
+    color: #9b6dff;
+    z-index: 2;
+    transition: transform 0.3s ease;
+}
+
+.dob-input-wrapper:focus-within .dob-icon {
+    transform: translateY(-50%) scale(1.1);
+    color: #ffd700;
+}
+
+.dob-input {
+    width: 100%;
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 1rem;
+    padding: 8px 0;
+    outline: none;
+}
+
+.dob-input::-webkit-calendar-picker-indicator {
+    cursor: pointer;
+    opacity: 0.7;
+    filter: hue-rotate(270deg);
+    transition: opacity 0.3s ease;
+}
+
+.dob-input::-webkit-calendar-picker-indicator:hover {
+    opacity: 1;
+}
+
+.dob-status {
+    margin-top: 10px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.4s ease;
+    min-height: 20px;
+}
+
+.status-icon {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+}
+
+.dob-status.valid {
+    background: rgba(0, 255, 150, 0.15);
+    color: #00ff96;
+    border: 1px solid rgba(0, 255, 150, 0.3);
+    animation: pulseSuccess 2s infinite;
+}
+
+.dob-status.valid .status-icon {
+    background: #00ff96;
+    color: #000;
+}
+
+.dob-status.invalid {
+    background: rgba(255, 45, 85, 0.15);
+    color: #ff2d55;
+    border: 1px solid rgba(255, 45, 85, 0.3);
+    animation: shake 0.5s ease-in-out;
+}
+
+.dob-status.invalid .status-icon {
+    background: #ff2d55;
+    color: #fff;
+}
+
+.dob-status.neutral {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.dob-status.neutral .status-icon {
+    background: rgba(255, 255, 255, 0.2);
+    color: #fff;
+}
+
+.btn-verify-age {
+    width: 100%;
+    background: linear-gradient(135deg, #9b6dff, #4a148c);
+    border: none;
+    color: #fff;
+    padding: 12px 20px;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    box-shadow: 0 4px 15px rgba(155, 109, 255, 0.3);
+}
+
+.btn-verify-age:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(155, 109, 255, 0.4);
+    background: linear-gradient(135deg, #a57bff, #5a1a9d);
+}
+
+.btn-verify-age:active {
+    transform: translateY(0);
+}
+
+/* Keyframe Animations */
+@keyframes pulseSuccess {
+    0%, 100% { box-shadow: 0 0 10px rgba(0, 255, 150, 0.4); }
+    50% { box-shadow: 0 0 20px rgba(0, 255, 150, 0.8); }
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-4px); }
+    75% { transform: translateX(4px); }
+}
+
+@keyframes floatLabel {
+    0% { transform: translateY(0) scale(1); }
+    100% { transform: translateY(-10px) scale(0.85); }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .dob-verification-box {
+        padding: 16px;
+    }
+    
+    .dob-input-wrapper {
+        padding: 12px 14px 12px 44px;
+    }
+    
+    .dob-icon {
+        left: 14px;
+        font-size: 1rem;
+    }
+}
