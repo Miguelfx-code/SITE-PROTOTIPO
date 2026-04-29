@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Escolar</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Tela de Introdução -->
+    <div id="tela-intro" class="tela-especial ativa">
+        <div class="intro-overlay">
+            <div class="intro-content">
+                <div class="loading-container">
+                    <div class="loading-bar"></div>
+                </div>
+                <button class="intro-btn" onclick="iniciarQuiz()">
+                    <i class="fas fa-play"></i> Acesse o nosso QUIZ
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tela de Lobby -->
+    <div id="tela-lobby" class="tela lobby-screen">
+        <nav class="lobby-nav">
+            <div class="nav-left">
+                <img src="https://i.ibb.co/ynDcZ1Mn/Whats-App-Image-2026-04-27-at-17-54-33.jpg" alt="Logo" class="mini-logo">
+                <span class="brand-name">SCHOOL QUIZ</span>
+                <div class="top-score-badge">
+                    <i class="fas fa-star"></i>
+                    <span>Total: <strong class="pontuacao-total-display">0</strong></span>
+                </div>
+            </div>
+            <div class="nav-center">
+                <a href="#" class="nav-link active">INICIO</a>
+                <a href="#" class="nav-link" onclick="alert('Recurso em breve!')">RANK GLOBAL</a>
+            </div>
+            <div class="nav-right">
+                    <div id="lobby-user-info" class="user-nav-info hidden">
+                        <img
+                            src="file:///C:/Users/Migas/.cursor/projects/c-Users-Migas-NOVOS-CODIGOS/assets/c__Users_Migas_AppData_Roaming_Cursor_User_workspaceStorage_e36d86c18cbb4faed781dbd99361aa3c_images_image-a3c7f6d1-3153-4b7b-bc89-676d0c9e0980.png"
+                            alt="Perfil"
+                            class="user-nav-avatar"
+                        >
+                        <button class="user-nav-name-btn" onclick="toggleUserMenu(event, 'lobby-user-menu')">
+                            <span class="user-nav-name">Jogador</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div id="lobby-user-menu" class="user-menu hidden">
+                            <button class="user-menu-item" onclick="abrirConfiguracoes()">
+                                <i class="fas fa-gear"></i> CONFIGURAÇÕES
+                            </button>
+                            <button class="user-menu-item danger" onclick="abrirModalSair()">
+                                <i class="fas fa-right-from-bracket"></i> SAIR
+                            </button>
+                        </div>
+                    </div>
+                    <div id="lobby-auth-buttons">
+                    <button class="nav-btn-login" onclick="mostrarTela('tela-login')">LOGIN</button>
+                    <button class="nav-btn-register" onclick="mostrarTela('tela-cadastro')">CADASTRAR-SE</button>
+                    </div>
+                </div>
+            </nav>
+
+        <main class="lobby-main">
+            <div class="hero-content">
+                <h1 class="hero-title">SCHOOL<br><span class="highlight">QUIZ</span></h1>
+                <p class="hero-subtitle">Um quiz interativo que transforma o aprendizado em jogo e o jogo em conhecimento.</p>
+                <button class="btn-play-now" onclick="cliqueJogarAgora()">
+                    <i class="fas fa-gamepad"></i> JOGAR AGORA
+                </button>
+            </div>
+        </main>
+
+        <footer class="lobby-footer">
+            <div class="footer-left">
+                <span class="footer-brand">SCHOOL QUIZ</span>
+            </div>
+            <div class="footer-center">
+                <a href="#" class="footer-link">discord</a>
+                <a href="#" class="footer-link">support</a>
+            </div>
+            <div class="footer-right">
+                <span class="credits">creditos finais 2026 Engenheiros MIGUEL e GUSTAVO</span>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Tela de Login -->
+    <div id="tela-login" class="tela">
+        <div class="login-overlay">
+            <div class="login-box">
+                <div class="login-logo">
+                    <!-- Simulando o logo da imagem com ícone e texto -->
+                    <div class="logo-circle">
+                        <span class="logo-text-mg">MG</span>
+                        <div class="logo-subtext">SCHOOL</div>
+                        <div class="logo-quiz">QUIZ</div>
+                        <i class="fas fa-lightbulb lightbulb-icon"></i>
+                    </div>
+                </div>
+                <div class="login-header">
+                    <h1>Bem-Vindo!</h1>
+                    <p class="login-subtitle">Faça login para continuar</p>
+                </div>
+                <form id="login-form" onsubmit="return handleLogin(event)">
+                    <div class="input-group">
+                        <i class="fas fa-user input-icon"></i>
+                        <input type="text" id="username" placeholder="Usuário ou e-mail" autocomplete="username">
+                    </div>
+                    <div class="input-group">
+                        <i class="fas fa-lock input-icon"></i>
+                        <input type="password" id="password" placeholder="Senha" autocomplete="current-password">
+                        <i class="fas fa-eye toggle-password"></i>
+                    </div>
+                    
+                    <div class="login-options">
+                        <label class="remember-me">
+                            <input type="checkbox">
+                            <span>Lembrar de mim</span>
+                        </label>
+                        <a href="#" class="forgot-password" onclick="esqueceuSenha()">Esqueceu a senha?</a>
+                    </div>
+
+                    <button type="submit" class="login-button">ENTRAR</button>
+                </form>
+
+                <div class="divider">
+                    <span>ou</span>
+                </div>
+
+                <button class="create-account-button" onclick="mostrarTela('tela-cadastro')">CRIAR CONTA</button>
+                <button class="btn-back-lobby-footer" onclick="mostrarTela('tela-lobby')">
+                    <i class="fas fa-home"></i> VOLTAR AO INÍCIO
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="tela-cadastro" class="tela">
+        <div class="login-overlay">
+            <div class="login-box">
+                <div class="login-logo">
+                    <div class="logo-circle">
+                        <span class="logo-text-mg">MG</span>
+                        <div class="logo-subtext">SCHOOL</div>
+                        <div class="logo-quiz">QUIZ</div>
+                        <i class="fas fa-lightbulb lightbulb-icon"></i>
+                    </div>
+                </div>
+                <div class="login-header">
+                    <h1>Bem-Vindo!</h1>
+                    <p class="login-subtitle">Criar nova conta</p>
+                </div>
+                <form id="register-form" onsubmit="return handleRegister(event)">
+                    <input type="hidden" id="reg-user-type" value="aluno">
+                    <div class="input-group">
+                        <i class="fas fa-user input-icon"></i>
+                        <input type="text" id="reg-username" placeholder="Nome de usuário" required>
+                    </div>
+                    <div class="input-group">
+                        <i class="fas fa-envelope input-icon"></i>
+                        <input type="email" id="reg-email" placeholder="E-mail" required>
+                    </div>
+                    <div class="input-group">
+                        <i class="fas fa-lock input-icon"></i>
+                        <input type="password" id="reg-password" placeholder="Senha" required>
+                    </div>
+                    <div class="input-group">
+                        <i class="fas fa-check-circle input-icon"></i>
+                        <input type="password" id="reg-confirm-password" placeholder="Confirmar senha" required>
+                    </div>
+                    
+                    <button type="submit" class="login-button">CADASTRAR-SE</button>
+                </form>
+
+                <div class="divider">
+                    <span>ou</span>
+                </div>
+
+                <button class="create-account-button" onclick="mostrarTela('tela-login')">VOLTAR AO LOGIN</button>
+                <button class="btn-back-lobby-footer" onclick="mostrarTela('tela-lobby')">
+                    <i class="fas fa-home"></i> VOLTAR AO INÍCIO
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="tela-categorias" class="tela">
+        <div class="categories-container">
+            <div class="categories-layout">
+                <!-- Banner Lateral/Principal -->
+                <div class="quiz-banner">
+                    <div class="banner-decorations">
+                        <div class="planet planet-1"></div>
+                        <div class="planet planet-2"></div>
+                        <div class="star star-1">★</div>
+                        <div class="star star-2">✦</div>
+                    </div>
+                    <div class="banner-content">
+                        <h1 class="banner-title">
+                            <span class="title-school">SCHOOL</span>
+                            <span class="title-quiz">QUIZ</span>
+                        </h1>
+                        <p class="banner-description">
+                            Escolha uma matéria e responda <span>perguntas incríveis</span> nos nossos <span>jogos de quiz!</span>
+                        </p>
+                        <button class="banner-btn" onclick="document.querySelector('.categories-grid').scrollIntoView({behavior: 'smooth'})">
+                            <i class="fas fa-gamepad"></i> COMEÇE AGORA ESCOLHENDO A MATERIA AO LADO
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Conteúdo das Categorias -->
+                <div class="categories-main">
+                    <div class="categories-header">
+                        <h2>Escolha uma Matéria</h2>
+                        <p>O que vamos aprender hoje?</p>
+                    </div>
+                    <div class="categories-grid">
+                        <div class="category-card math" onclick="mostrarTela('tela-jogos')">
+                            <div class="card-icon">
+                                <i class="fas fa-calculator"></i>
+                            </div>
+                            <div class="card-content">
+                                <h3>Matemática</h3>
+                                <p>Desafios e cálculos</p>
+                            </div>
+                            <div class="card-badge">Ativo</div>
+                        </div>
+                        
+                        <div class="category-card portuguese" onclick="irParaJogos('portugues')">
+                            <div class="card-icon">
+                                <i class="fas fa-book"></i>
+                            </div>
+                            <div class="card-content">
+                                <h3>Português</h3>
+                                <p>Gramática e leitura</p>
+                            </div>
+                            <div class="card-lock"><i class="fas fa-lock"></i></div>
+                        </div>
+
+                        <div class="category-card science" onclick="irParaJogos('ciencias')">
+                            <div class="card-icon">
+                                <i class="fas fa-flask"></i>
+                            </div>
+                            <div class="card-content">
+                                <h3>Ciências</h3>
+                                <p>O mundo natural</p>
+                            </div>
+                            <div class="card-lock"><i class="fas fa-lock"></i></div>
+                        </div>
+
+                        <div class="category-card history" onclick="irParaJogos('historia')">
+                            <div class="card-icon">
+                                <i class="fas fa-landmark"></i>
+                            </div>
+                            <div class="card-content">
+                                <h3>História</h3>
+                                <p>Passado e presente</p>
+                            </div>
+                            <div class="card-lock"><i class="fas fa-lock"></i></div>
+                        </div>
+
+                        <div class="category-card geography" onclick="irParaJogos('geografia')">
+                            <div class="card-icon">
+                                <i class="fas fa-globe-americas"></i>
+                            </div>
+                            <div class="card-content">
+                                <h3>Geografia</h3>
+                                <p>Países e mapas</p>
+                            </div>
+                            <div class="card-lock"><i class="fas fa-lock"></i></div>
+                        </div>
+                    </div>
+                    <button class="back-button" onclick="mostrarTela('tela-lobby')">
+                        <i class="fas fa-arrow-left"></i> Voltar ao Início
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="tela-jogos" class="tela games-screen">
+        <nav class="games-nav">
+            <div class="nav-left">
+                <img src="https://i.ibb.co/ynDcZ1Mn/Whats-App-Image-2026-04-27-at-17-54-33.jpg" alt="Logo" class="mini-logo">
+                <span class="brand-name">SCHOOL QUIZ</span>
+                <div class="top-score-badge">
+                    <i class="fas fa-star"></i>
+                    <span>Total: <strong class="pontuacao-total-display">0</strong></span>
+                </div>
+            </div>
+            <div class="nav-center">
+                <a href="#" class="nav-link active">CATEGORIAS</a>
+                <a href="#" class="nav-link" onclick="alert('Recurso em breve!')">RANK GLOBAL</a>
+            </div>
+            <div class="nav-right">
+                <div id="games-user-info" class="user-nav-info hidden">
+                    <img
+                        src="file:///C:/Users/Migas/.cursor/projects/c-Users-Migas-NOVOS-CODIGOS/assets/c__Users_Migas_AppData_Roaming_Cursor_User_workspaceStorage_e36d86c18cbb4faed781dbd99361aa3c_images_image-a3c7f6d1-3153-4b7b-bc89-676d0c9e0980.png"
+                        alt="Perfil"
+                        class="user-nav-avatar"
+                    >
+                    <button class="user-nav-name-btn" onclick="toggleUserMenu(event, 'games-user-menu')">
+                        <span class="user-nav-name">Jogador</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div id="games-user-menu" class="user-menu hidden">
+                        <button class="user-menu-item" onclick="abrirConfiguracoes()">
+                            <i class="fas fa-gear"></i> CONFIGURAÇÕES
+                        </button>
+                        <button class="user-menu-item danger" onclick="abrirModalSair()">
+                            <i class="fas fa-right-from-bracket"></i> SAIR
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <header class="games-header">
+            <div class="header-title-wrapper">
+                <div class="title-accent"></div>
+                <h1 class="games-main-title">JOGOS DISPONÍVEIS</h1>
+            </div>
+            <div class="sector-badge">SETOR: MATEMÁTICA APLICADA</div>
+        </header>
+
+        <main class="games-grid-container">
+            <div class="games-grid">
+                <!-- Jogo 1 -->
+                <div class="game-card" onclick="comecarJogo()">
+                    <div class="card-image-wrapper">
+                        <img src="https://i.ibb.co/PGSbrmFG/image-4.jpg" alt="Equação Mortal">
+                        <span class="level-badge">NVL. 1</span>
+                     </div>
+                     <div class="card-info">
+                         <h3>EQUAÇÃO MORTAL</h3>
+                         <p>Resolva sistemas lineares antes que o tempo colapse a matriz. Alta intensidade, alta recompensa.</p>
+                         <div class="card-footer">
+                             <span class="subject"><i class="fas fa-microchip"></i> ÁLGEBRA</span>
+                             <i class="fas fa-arrow-right"></i>
+                         </div>
+                     </div>
+                 </div>
+ 
+                 <!-- Jogo 2 -->
+                 <div class="game-card" onclick="iniciarQuiz()">
+                     <div class="card-image-wrapper">
+                         <img src="https://i.ibb.co/PGSbrmFG/image-4.jpg" alt="Geometria Espacial">
+                         <span class="level-badge gold">NVL. 3</span>
+                     </div>
+                     <div class="card-info">
+                         <h3>GEOMETRIA ESPACIAL</h3>
+                         <p>Navegue por labirintos poligonais calculando volumes e áreas em tempo real sob gravidade zero.</p>
+                         <div class="card-footer">
+                             <span class="subject"><i class="fas fa-shapes"></i> GEOMETRIA</span>
+                             <i class="fas fa-arrow-right"></i>
+                         </div>
+                     </div>
+                 </div>
+ 
+                 <!-- Jogo 3 -->
+                 <div class="game-card" onclick="iniciarQuiz()">
+                     <div class="card-image-wrapper">
+                         <img src="https://i.ibb.co/PGSbrmFG/image-4.jpg" alt="Matriz de Fogo">
+                         <span class="level-badge red">NVL. 5</span>
+                     </div>
+                     <div class="card-info">
+                         <h3>MATRIZ DE FOGO</h3>
+                         <p>Calcule determinantes sob fogo cruzado. Multiplicação de matrizes com penalidades extremas.</p>
+                         <div class="card-footer">
+                             <span class="subject"><i class="fas fa-hashtag"></i> MATRIZES</span>
+                             <i class="fas fa-arrow-right"></i>
+                         </div>
+                     </div>
+                 </div>
+ 
+                 <!-- Jogo 4 -->
+                 <div class="game-card" onclick="iniciarQuiz()">
+                     <div class="card-image-wrapper">
+                         <img src="https://i.ibb.co/PGSbrmFG/image-4.jpg" alt="Cálculo Sombrio">
+                         <span class="level-badge purple">NVL. 2</span>
+                    </div>
+                    <div class="card-info">
+                        <h3>CÁLCULO SOMBRIO</h3>
+                        <p>Integrais definidas em ambientes de baixa visibilidade. Use derivadas para iluminar o caminho.</p>
+                        <div class="card-footer">
+                            <span class="subject"><i class="fas fa-chart-line"></i> CÁLCULO</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <button class="btn-back-to-categories" onclick="mostrarTela('tela-categorias')">
+                <i class="fas fa-th-large"></i> VOLTAR ÀS CATEGORIAS
+            </button>
+        </main>
+
+        <footer class="games-footer">
+            <div class="footer-left">
+                <span class="footer-brand-highlight">SCHOOL QUIZ</span>
+                <span class="footer-year">© 2026 ENGENHEIROS MIGUEL E GUSTAVO</span>
+            </div>
+            <div class="footer-right">
+                <a href="#" class="footer-link">PRIVACIDADE</a>
+                <a href="#" class="footer-link">DISCORD</a>
+                <a href="#" class="footer-link">SUPORT</a>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Tela de Quiz Customizada -->
+    <div id="tela-quiz" class="tela quiz-screen-custom">
+        <div class="quiz-top-nav">
+            <button class="btn-back-quiz" onclick="voltarParaJogos()">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            <div class="quiz-subject-badge">
+                <i class="fas fa-globe-americas"></i> <span id="quiz-title-display">Álgebra</span>
+            </div>
+            <div class="quiz-score-display">
+                <img src="https://i.ibb.co/ynDcZ1Mn/Whats-App-Image-2026-04-27-at-17-54-33.jpg" alt="Moeda" class="coin-icon">
+                <span id="pontuacao-atual" class="pontuacao-total-display">0</span>
+            </div>
+        </div>
+
+        <div class="quiz-progress-container">
+            <p class="question-counter">Pergunta <span id="pergunta-atual-num">1</span> de <span id="total-perguntas-num">10</span></p>
+            <div class="progress-bar-bg">
+                <div id="progress-bar-fill" class="progress-bar-fill"></div>
+            </div>
+        </div>
+
+        <div class="quiz-main-content">
+            <div class="question-box">
+                <h2 id="texto-pergunta">Pergunta aqui</h2>
+            </div>
+
+            <div id="obs-wait" class="obs-wait hidden">
+                <div class="obs-text">
+                    <span class="obs-badge">OBS</span>
+                    Aguarde <strong>5 segundos</strong> (de 15 para 10) para os Items de resposta aparecer.
+                </div>
+            </div>
+
+            <div id="alternativas-container" class="alternativas-grid">
+                <!-- Alternativas serão inseridas via JS -->
+            </div>
+        </div>
+
+        <div class="quiz-actions">
+            <div class="utility-buttons">
+                <button class="btn-utility" onclick="skipQuestion()">
+                    <div class="utility-icon"><i class="fas fa-forward"></i></div>
+                    <span>SKIP</span>
+                </button>
+                <button class="btn-utility" onclick="previousQuestion()">
+                    <div class="utility-icon"><i class="fas fa-history"></i></div>
+                    <span>VOLTAR</span>
+                </button>
+                <div class="timer-circle">
+                    <span id="temporizador">15</span>
+                </div>
+            </div>
+
+            <button id="btn-revelar" class="btn-reveal hidden" onclick="revelarRespostas()">
+                REVELAR RESPOSTA
+            </button>
+            
+            <button id="btn-proxima" class="btn-next hidden" onclick="proximaPergunta()">
+                PRÓXIMA
+            </button>
+
+            <button id="btn-como-resolver" class="btn-how-to hidden" onclick="mostrarRevisao()">
+                COMO RESOLVER A QUESTÃO?
+            </button>
+        </div>
+
+        <!-- Alerta de Skip -->
+        <div id="skip-alert" class="skip-alert-overlay hidden">
+            <div class="skip-alert-box">
+                <i class="fas fa-exclamation-triangle"></i>
+                <p>Se você pular esta questão irá perder a pontuação dela.</p>
+                <div class="skip-alert-buttons">
+                    <button class="btn-confirm-skip" onclick="confirmSkip()">PULAR</button>
+                    <button class="btn-cancel-skip" onclick="closeSkipAlert()">CANCELAR</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Overlay de Parabéns (acerto) -->
+        <div id="congrats-overlay" class="congrats-overlay hidden" role="dialog" aria-modal="true" aria-hidden="true">
+            <div class="congrats-card" role="document">
+                <div class="congrats-title">PARABÉNS!</div>
+                <div class="congrats-subtitle">
+                    <span id="congrats-username">Jogador</span>, você acertou!
+                </div>
+
+                <div class="congrats-score">
+                    <div class="congrats-score-label">SCORE BOOST</div>
+                    <div class="congrats-score-value">
+                        +<span id="congrats-points">10</span> <span class="congrats-score-suffix">PONTOS</span>
+                    </div>
+                </div>
+
+                <button type="button" class="congrats-continue" onclick="hideCongrats()">
+                    CONTINUAR
+                </button>
+            </div>
+        </div>
+
+        <!-- Overlay de Infelizmente (erro) -->
+        <div id="fail-overlay" class="fail-overlay hidden" role="dialog" aria-modal="true" aria-hidden="true">
+            <div class="fail-card" role="document">
+                <div class="fail-title">INFELIZMENTE!</div>
+                <div class="fail-subtitle">
+                    <span id="fail-username">Jogador</span>, você não acertou esta!
+                </div>
+
+                <div class="fail-score">
+                    <div class="fail-score-label">SCORE BOOST</div>
+                    <div class="fail-score-value">
+                        +<span id="fail-points">0</span> <span class="fail-score-suffix">PONTOS</span>
+                    </div>
+                </div>
+
+                <button type="button" class="fail-continue" onclick="hideFail()">
+                    CONTINUAR
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tela de Revisão de Erros -->
+    <div id="tela-revisao" class="tela revision-screen">
+        <div class="revision-header">
+            <h1 class="revision-title">REVISÃO DE ERROS</h1>
+        </div>
+        
+        <div class="revision-container">
+            <div class="revision-card">
+                <div class="revision-question-header">
+                    <span id="revision-question-id">QUESTÃO 4</span>
+                    <i class="fas fa-exclamation-triangle warning-icon"></i>
+                </div>
+                
+                <div class="revision-question-text-box">
+                    <h2 id="revision-question-text">5x - 10 = 65</h2>
+                </div>
+
+                <div class="revision-answers-row">
+                    <div class="answer-box user-answer">
+                        <span class="answer-label">SUA RESPOSTA</span>
+                        <span id="revision-user-answer" class="answer-value wrong">x = 11</span>
+                    </div>
+                    <div class="answer-box correct-answer">
+                        <span class="answer-label">RESPOSTA CORRETA</span>
+                        <span id="revision-correct-answer" class="answer-value right">x = 15</span>
+                    </div>
+                </div>
+
+                <div class="resolution-section">
+                    <div class="resolution-title">
+                        <i class="far fa-lightbulb"></i> RESOLUÇÃO PASSO A PASSO
+                    </div>
+                    <div id="revision-resolution-steps" class="resolution-steps">
+                        <!-- Passos inseridos via JS -->
+                    </div>
+                </div>
+            </div>
+
+            <button class="btn-back-to-quiz" onclick="mostrarTela('tela-quiz')">
+                <i class="fas fa-arrow-left"></i> VOLTAR PARA O QUIZ
+            </button>
+        </div>
+    </div>
+
+    <div id="tela-final" class="tela result-screen">
+        <div class="result-bg"></div>
+
+        <nav class="result-topbar">
+            <div class="result-brand">
+                <img src="https://i.ibb.co/ynDcZ1Mn/Whats-App-Image-2026-04-27-at-17-54-33.jpg" alt="Logo" class="mini-logo result-mini-logo">
+                <span class="brand-name result-brand-name">SCHOOL QUIZ</span>
+            </div>
+            <div class="result-top-actions">
+                <i class="fas fa-trophy"></i>
+            </div>
+        </nav>
+
+        <main class="result-content">
+            <div class="result-score-card">
+                <div class="result-avatar" aria-hidden="true" style="overflow: hidden; padding: 0;">
+                    <img id="result-avatar-img" src="" alt="Avatar" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%; display: none;">
+                    <i class="fas fa-user" id="result-avatar-icon" style="margin-top: 20px;"></i>
+                </div>
+                <div id="result-user-name" style="color: #fff; font-size: 1.3rem; font-weight: 800; text-align: center; margin-bottom: 15px; letter-spacing: 1px; text-transform: uppercase;">Jogador</div>
+
+                <div class="result-score-value">
+                    <span id="pontuacao-total">0</span> <span class="result-score-suffix">PTS</span>
+                </div>
+                <div class="result-score-subtitle" id="result-subtitle">MISSION ACCOMPLISHED</div>
+            </div>
+
+            <div class="result-metrics">
+                <div class="metric-card metric-performance">
+                    <div class="metric-label">DESEMPENHO</div>
+                    <div class="metric-value">
+                        <span id="performance-percent">0</span>%
+                    </div>
+                </div>
+
+                <div class="metric-card metric-time">
+                    <div class="metric-label">TEMPO</div>
+                    <div class="metric-value" id="tempo-total">0 m 0 s</div>
+                </div>
+            </div>
+
+            <div class="result-buttons">
+                <button class="result-btn result-btn-primary" onclick="refazerQuiz()">
+                    <i class="fas fa-redo"></i> REFAZER QUIZ
+                </button>
+                <button class="result-btn result-btn-secondary" onclick="mostrarEstatisticas()">
+                    <i class="fas fa-chart-bar"></i> ESTATISTICAS
+                </button>
+            </div>
+
+            <button class="result-back" onclick="voltar('tela-jogos')">
+                <i class="fas fa-arrow-left"></i> VOLTAR PARA JOGOS
+            </button>
+        </main>
+    </div>
+
+    <div id="tela-configuracoes" class="tela config-screen">
+        <div class="config-bg"></div>
+
+        <nav class="config-topbar">
+            <button class="config-back" onclick="fecharConfiguracoes()">
+                <i class="fas fa-arrow-left"></i> VOLTAR
+            </button>
+            <h2 class="config-title">CONFIGURAÇÕES DA CONTA</h2>
+            <div class="config-top-actions">
+                <i class="fas fa-gear"></i>
+            </div>
+        </nav>
+
+        <main class="config-content">
+            <div class="config-header">
+                <h2>Configurar Perfil</h2>
+                <p>Personalize as definições da sua conta</p>
+            </div>
+            
+            <div class="config-card">
+                <!-- Coluna Esquerda: Formulários -->
+                <div class="config-form-col">
+                    <div class="input-group">
+                        <label for="config-username">
+                            <div class="label-icon"><i class="fas fa-pen"></i></div>
+                            NOME DA CONTA
+                        </label>
+                        <input type="text" id="config-username" placeholder="Seu nome" oninput="checkNameChange()">
+                    </div>
+
+                    <div class="input-group hidden" id="password-confirm-group">
+                        <label for="config-password-confirm" class="warning-label">
+                            <div class="label-icon"><i class="fas fa-lock"></i></div>
+                            SENHA ATUAL
+                        </label>
+                        <input type="password" id="config-password-confirm" placeholder="Digite sua senha">
+                    </div>
+
+                    <div class="input-group">
+                        <label>
+                            <div class="label-icon"><i class="fas fa-venus-mars"></i></div>
+                            GÊNERO
+                        </label>
+                        <div class="gender-selection">
+                            <button class="gender-btn gender-masc" onclick="selectGender(this, 'masculino')"><i class="fas fa-mars"></i> Masc.</button>
+                            <button class="gender-btn gender-fem" onclick="selectGender(this, 'feminino')"><i class="fas fa-venus"></i> Fem.</button>
+                            <button class="gender-btn gender-other" onclick="selectGender(this, 'outro')"><i class="fas fa-genderless"></i> Outro</button>
+                        </div>
+                        <input type="hidden" id="config-gender" value="">
+                    </div>
+
+                    <div class="input-group">
+                        <label for="config-email">
+                            <div class="label-icon"><i class="fas fa-envelope"></i></div>
+                            E-MAIL (OPCIONAL)
+                        </label>
+                        <input type="email" id="config-email" placeholder="seu@email.com">
+                        <span class="input-note">Sem o e-mail você não conseguirá recuperar sua senha futuramente.</span>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="config-phone">
+                            <div class="label-icon"><i class="fas fa-phone"></i></div>
+                            TELEFONE (OPCIONAL)
+                        </label>
+                        <input type="tel" id="config-phone" placeholder="(00) 00000-0000">
+                    </div>
+                </div>
+
+                <!-- Coluna Direita: Mídia e Toggles -->
+                <div class="config-media-col">
+                    <div class="config-media-box">
+                        <div class="media-box-title">Imagem de Perfil</div>
+                        <div class="profile-pic-wrapper">
+                            <img id="config-avatar-preview" src="file:///C:/Users/Migas/.cursor/projects/c-Users-Migas-NOVOS-CODIGOS/assets/c__Users_Migas_AppData_Roaming_Cursor_User_workspaceStorage_e36d86c18cbb4faed781dbd99361aa3c_images_image-a3c7f6d1-3153-4b7b-bc89-676d0c9e0980.png" alt="Sua Foto" class="config-avatar">
+                            <button class="btn-change-pic" onclick="document.getElementById('input-file-avatar').click()">
+                                <i class="fas fa-upload"></i> Alterar imagem
+                            </button>
+                            <input type="file" id="input-file-avatar" accept="image/*" class="hidden" onchange="previewAvatar(event)">
+                        </div>
+                    </div>
+
+                    <div class="config-toggle-box">
+                        <div class="toggle-info">
+                            <div class="toggle-icon"><i class="fas fa-calendar-check"></i></div>
+                            <div class="toggle-text">
+                                <h4>Verificação de Idade</h4>
+                                <p>Confirmo que tenho mais de 13 anos</p>
+                            </div>
+                        </div>
+                        <label class="modern-toggle">
+                            <input type="checkbox" id="config-age-verify">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="config-actions">
+                <button class="btn-cancel-config" onclick="fecharConfiguracoes()">Cancelar</button>
+                <button class="btn-save-config" onclick="salvarConfiguracoes()">
+                    <i class="fas fa-save"></i> Salvar Alterações
+                </button>
+            </div>
+        </main>
+    </div>
+
+    <div id="tela-estatisticas" class="tela stats-screen">
+        <div class="stats-bg"></div>
+
+        <nav class="stats-topbar">
+            <div class="stats-brand">
+                <img src="https://i.ibb.co/ynDcZ1Mn/Whats-App-Image-2026-04-27-at-17-54-33.jpg" alt="Logo" class="mini-logo stats-mini-logo">
+                <span class="brand-name stats-brand-name">SCHOOL QUIZ</span>
+            </div>
+            <div class="stats-top-actions">
+                <i class="fas fa-chart-line"></i>
+            </div>
+        </nav>
+
+        <main class="stats-content">
+            <div class="stats-title-wrap">
+                <h2 class="stats-title">MISSION REPORT</h2>
+                <div class="stats-level">QUIZ ESCOLAR</div>
+            </div>
+
+            <div class="stats-top-grid">
+                <div class="stats-precision-card">
+                    <div class="stats-precision-label">PRECISÃO</div>
+                    <div class="stats-precision-value">
+                        <span id="precision-percent">0</span>%
+                    </div>
+                </div>
+
+                <div class="stats-performance-grid">
+                    <div class="stats-perf-card stats-perf-card-acc">
+                        <div class="stats-perf-icon"><i class="fas fa-check"></i></div>
+                        <div class="stats-perf-label">ACERTOS</div>
+                        <div class="stats-perf-value"><span id="acertos-count">0</span></div>
+                    </div>
+                    <div class="stats-perf-card stats-perf-card-err">
+                        <div class="stats-perf-icon"><i class="fas fa-xmark"></i></div>
+                        <div class="stats-perf-label">ERROS</div>
+                        <div class="stats-perf-value"><span id="erros-count">0</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <section class="stats-review">
+                <h3 class="stats-review-title">REVISÃO DE ERROS</h3>
+                <div id="questoes-erradas" class="stats-review-list"></div>
+            </section>
+
+            <button class="stats-back" onclick="voltar('tela-final')">
+                <i class="fas fa-arrow-left"></i> VOLTAR PARA O RESUMO
+            </button>
+        </main>
+    </div>
+
+    <!-- Modal de Confirmação de Saída -->
+    <div id="logout-confirm-overlay" class="logout-confirm-overlay hidden">
+        <div class="logout-confirm-box">
+            <div class="logout-icon-wrapper">
+                <i class="fas fa-triangle-exclamation warning-icon"></i>
+            </div>
+            <h2>Você tem certeza que deseja sair desta conta?</h2>
+            <p>Tome cuidadado para não perder os dados dela, para não perder o acesso a conta.</p>
+            <div class="logout-confirm-actions">
+                <button class="btn-cancel-logout" onclick="fecharModalSair()">CANCELAR</button>
+                <button class="btn-confirm-logout" onclick="confirmarSairConta()">SAIR DA CONTA</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
